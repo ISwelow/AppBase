@@ -1,54 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <style>
-        .custom-table {
-            width: 100%;
-            border: 1px solid #dee2e6;
-            border-radius: 0.25rem;
-            margin-bottom: 1rem;
-            color: #212529;
-        }
 
-        .custom-table th,
-        .custom-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
 
-        .custom-table thead th {
-            background-color: #343a40;
-            color: #ffffff;
-            border-color: #454d55;
-        }
+<table class="table custom-table custom-table-striped custom-table-hover">
+    <thead class="thead-dark">
+        <!-- ... Contenido del encabezado ... -->
+        
+    </thead>
+    <tbody>
+        <!-- ... Contenido del cuerpo ... -->
+    </tbody>
+</table>
 
-        .custom-table tbody + tbody {
-            border-top: 1px solid #dee2e6;
-        }
 
-        .custom-table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+<?php
+include 'menu.php';
 
-        .custom-table-hover tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.075);
-        }
-
-        .border-4 th,
-        .border-4 td {
-            border: 4px solid #000000;
-        }
-    </style>
-</head>
-<body>
-    <?php include 'menu.php'; 
-
-    $servidor = "localhost";
+$servidor = "localhost";
 $usuario = "root";
 $password = "";
 $baseDeDatos = "OXXO";
@@ -88,49 +55,41 @@ function obtenerDatosDeTabla($servidor, $usuario, $password, $baseDeDatos, $tabl
 
 ?>
 
-    <br>
+<br>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">Agregar Usuario</button>
 
-    <br>
-    <br>
-    
-    <table class="table custom-table custom-table-striped custom-table-hover border-4">
-        <thead class="thead-dark">
+<br>
+<br>
+<table class="table border=4">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre de Usuario</th>
+            <th>Contraseña</th>
+            <th>Estado</th>
+            <th>Tipo de Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($datos as $fila): ?>
             <tr>
-                <th>ID</th>
-                <th>Nombre de Usuario</th>
-                <th>Contraseña</th>
-                <th>Estado</th>
-                <th>Tipo de Usuario</th>
-                <th>Acciones</th>
+                <td><?= $fila["id"] ?></td>
+                <td><?= $fila["username"] ?></td>
+                <td>
+                    <?= str_repeat('*', strlen($fila['password'])) ?>
+                    <button class="btn btn-info" onclick="mostrarcontraseña('<?= $fila['password'] ?>')">Mostrar</button>
+                </td>
+                <td><?= $fila["status"] ?></td>
+                <td><?= $fila["profile_name"] ?></td>
+                <td>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal<?= $fila["id"] ?>">Editar</button>
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal<?= $fila["id"] ?>">Eliminar</button>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($datos as $fila): ?>
-                <tr>
-                    <td><?= $fila["id"] ?></td>
-                    <td><?= $fila["username"] ?></td>
-                    <td>
-                        <?= str_repeat('*', strlen($fila['password'])) ?>
-                        <button class="btn btn-info" onclick="mostrarcontraseña('<?= $fila['password'] ?>')">Mostrar</button>
-                    </td>
-                    <td><?= $fila["status"] ?></td>
-                    <td><?= $fila["profile_name"] ?></td>
-                    <td>
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editarUsuarioModal<?= $fila["id"] ?>">Editar</button>
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarUsuarioModal<?= $fila["id"] ?>">Eliminar</button>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <script>
-        function mostrarcontraseña(password) {
-            alert('Contraseña: ' + password);
-        }
-    </script>
-
+        <?php endforeach; ?>
+    </tbody>
+</table>
 
 
 <script>
@@ -290,5 +249,3 @@ function downloadCSV(csv, filename) {
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-</body>
-</html>
